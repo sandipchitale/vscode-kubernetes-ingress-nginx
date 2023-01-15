@@ -3,7 +3,7 @@
     "displayName": "ingress-nginx kubectl plugin integration",
     "icon": "images/icon.png",
     "description": "Integrates with ingress-nginx kubectl plugin.",
-    "version": "1.0.12",
+    "version": "1.0.13",
     "preview": true,
     "license": "SEE IN FILE LICENSE",
     "keywords": [
@@ -63,7 +63,7 @@
             },
             {
                 "command": "k8s.ingress-nginx.certs",
-                "title": "Certificates for ingress hosts",
+                "title": "Certificate chains for ingress hosts",
                 "icon": "$(workspace-trusted)",
                 "category": "ingress-nginx"
             }
