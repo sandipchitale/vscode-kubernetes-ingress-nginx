@@ -1,0 +1,115 @@
+{
+    "name": "vscode-kubernetes-ingress-nginx",
+    "displayName": "ingress-nginx kubectl plugin integration",
+    "icon": "images/icon.png",
+    "description": "Integrates with ingress-nginx kubectl plugin.",
+    "version": "1.0.10",
+    "preview": true,
+    "license": "SEE IN FILE LICENSE",
+    "keywords": [
+        "kubernetes"
+    ],
+    "extensionDependencies": [
+        "ms-kubernetes-tools.vscode-kubernetes-tools"
+    ],
+    "publisher": "sandipchitale",
+    "author": {
+        "name": "Sandip Chitale"
+    },
+    "maintainers": [
+        "Sandip Chitale <sandipchitale@gmail.com>"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/sandipchitale/vscode-kubernetes-ingress-nginx"
+    },
+    "engines": {
+        "vscode": "^1.74.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "onView:extension.vsKubernetesExplorer"
+    ],
+    "main": "./out/extension",
+    "contributes": {
+        "configuration": {
+            "properties": {
+                "vscode-kubernetes-ingress-nginx.ingress-nginx-deployment-namespace": {
+                    "type": "string",
+                    "default": "ingress-nginx-ns",
+                    "description": "Specify namespace where ingress-nginx ingress controller deployment is running."
+                },
+                "vscode-kubernetes-ingress-nginx.ingress-nginx-deployment-name": {
+                    "type": "string",
+                    "default": "ingress-nginx-controller",
+                    "description": "Specify name of the ingress-nginx ingress controller deployment."
+                }
+            }
+        },
+        "commands": [
+            {
+                "command": "k8s.ingress-nginx.backends",
+                "title": "All Ingress Backends",
+                "icon": "$(go-to-file)",
+                "category": "ingress-nginx"
+            },
+            {
+                "command": "k8s.ingress-nginx.conf",
+                "title": "NGINX config for ingress hosts",
+                "icon": "$(code)",
+                "category": "ingress-nginx"
+            },
+            {
+                "command": "k8s.ingress-nginx.certs",
+                "title": "Certificates for ingress hosts",
+                "icon": "$(workspace-trusted)",
+                "category": "ingress-nginx"
+            }
+        ],
+        "menus": {
+            "view/item/context": [
+                {
+                    "command": "k8s.ingress-nginx.backends",
+                    "group": "inline",
+                    "when": "view == extension.vsKubernetesExplorer && viewItem =~ /vsKubernetes\\.resource\\.ingress/i"
+                },
+                {
+                    "command": "k8s.ingress-nginx.conf",
+                    "group": "inline",
+                    "when": "view == extension.vsKubernetesExplorer && viewItem =~ /vsKubernetes\\.resource\\.ingress/i"
+                },
+                {
+                    "command": "k8s.ingress-nginx.certs",
+                    "group": "inline",
+                    "when": "view == extension.vsKubernetesExplorer && viewItem =~ /vsKubernetes\\.resource\\.ingress/i"
+                }
+            ]
+        }
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "pretest": "npm run compile && npm run lint",
+        "lint": "eslint src --ext ts",
+        "test": "node ./out/test/runTest.js"
+    },
+    "devDependencies": {
+        "@types/glob": "^7.1.4",
+        "@types/mocha": "^9.0.0",
+        "@types/node": "14.x",
+        "@types/vscode": "^1.62.0",
+        "@typescript-eslint/eslint-plugin": "^5.1.0",
+        "@typescript-eslint/parser": "^5.1.0",
+        "@vscode/test-electron": "^1.6.2",
+        "eslint": "^8.1.0",
+        "glob": "^7.1.7",
+        "mocha": "^9.1.3",
+        "typescript": "^4.4.4"
+    },
+    "dependencies": {
+        "vscode-kubernetes-tools-api": "^1.3.0"
+    }
+}
