@@ -145,12 +145,35 @@ async function invokeCommandAndShowOutput(command: string, prefix: string, proce
             content = '';
             commandDetails.stdout.split('-----END CERTIFICATE-----').forEach((certificateOrKey: string) => {
                 if (certificateOrKey) {
-                    if (certificateOrKey.startsWith('-----BEGIN CERTIFICATE-----')) {
-                        const certificateAsPem = `${certificateOrKey}-----END CERTIFICATE-----`.trim();
-                        const cert = new X509Certificate(certificateAsPem);
-                        content += `${content}\n${certificateAsPem}\n${cert.toString()}`;
+                    if (certificateOrKey.startsWith('-----BEGIN CERTIFICATE-----') ||
+                        certificateOrKey.startsWith('\n-----BEGIN CERTIFICATE-----') ) {
+                        let certificateAsPem = `${certificateOrKey}`.trim();
+                        if (certificateAsPem.endsWith('\n')) {
+                            certificateAsPem += '-----END CERTIFICATE-----';
+                        } else {
+                            certificateAsPem += '\n-----END CERTIFICATE-----';
+                        }
+                        try {
+                            const cert = new X509Certificate(certificateAsPem);
+                            let certString = `X509Certificate {
+    Subject: ${cert.subject}
+    Subject Alt Name: ${cert.subjectAltName?.split(',').join('\n\t\t')}
+    Issuer: ${cert.issuer},
+    Infoaccess: ${cert.infoAccess}
+    Validfrom: ${cert.validFrom}
+    Validto: ${cert.validTo}
+    Fingerprint: ${cert.fingerprint}
+    Fingerprint256: ${cert.fingerprint256}
+    Keyusage: ${cert.keyUsage}
+    Serialnumbe: ${cert.serialNumber}
+}`.trim();
+                            content = `${content}\n${certificateAsPem}\n\nDecode X509Certificate:\n${certString}\n\n`;
+                        } catch (error) {
+                            console.error(error);
+                            content = `${content}\n${certificateOrKey}`;
+                        }
                     } else {
-                        content += `${content}\n${certificateOrKey}`;
+                        content = `${content}\n${certificateOrKey}`;
                     }
                 }
             });
@@ -164,7 +187,6 @@ async function invokeCommandAndShowOutput(command: string, prefix: string, proce
         return Promise.reject(commandDetails.stderr);
     }
 }
-
 
 export function deactivate() {
 }
