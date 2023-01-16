@@ -85,7 +85,7 @@ async function hostConf(target?: any) {
                                     `ingress-nginx conf -n ${ingressNginxDeploymentNamespace} --deployment ${ingressNginxDeploymentName} --host ${rule.host}`,
                                     `# Configuration for ingress: ${commandTarget.name} host: ${rule.host} :`,
                                     false,
-                                    (await vscode.languages.getLanguages()).includes('NGINX') ? 'NGINX' : 'plaintext'
+                                    (await vscode.languages.getLanguages()).includes('nginx') ? 'nginx' : 'plaintext'
                                 );
                             } catch (error) {
                                 vscode.window.showErrorMessage(`Failed to get configuration for ingress: ${commandTarget.name} host: ${rule.host}`);
