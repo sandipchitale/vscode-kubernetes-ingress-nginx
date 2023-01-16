@@ -79,6 +79,6 @@ This extension works with Microsoft Kubernetes extension.
 
 ## Release Notes
 
-### 1.0.13
+### 1.0.23
 
 Initial release.

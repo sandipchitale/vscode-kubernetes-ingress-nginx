@@ -195,6 +195,11 @@ async function invokeCommandAndShowOutput(command: string, prefix: string, proce
             content = '';
             commandDetails.stdout.split('-----END CERTIFICATE-----').forEach((certificateOrKey: string) => {
                 if (certificateOrKey) {
+                    // Strip blank lines
+                    certificateOrKey = certificateOrKey
+					.split(/\r?\n/)
+					.filter(line => line.trim().length > 0)
+					.join('\n');
                     if (certificateOrKey.startsWith('-----BEGIN CERTIFICATE-----') ||
                         certificateOrKey.startsWith('\n-----BEGIN CERTIFICATE-----') ) {
                         let certificateAsPem = `${certificateOrKey}`.trim();
