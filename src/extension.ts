@@ -207,9 +207,12 @@ async function invokeCommandAndShowOutput(command: string, prefix: string, proce
                             const cert = new X509Certificate(certificateAsPem);
                             let certString = `X509Certificate {
     Subject: ${cert.subject}
-    Subject Alt Name: ${cert.subjectAltName?.split(',').join('\n\t\t')}
-    Issuer: ${cert.issuer},
-    Infoaccess: ${cert.infoAccess}
+    Subject Alt Name:
+        ${cert.subjectAltName?.split(', ').join('\n\t\t')}
+    Issuer:
+        ${cert.issuer?.split('\n').join('\n\t\t')}
+    Infoaccess:
+        ${cert.infoAccess?.split('\n').join('\n\t\t')}
     Validfrom: ${cert.validFrom}
     Validto: ${cert.validTo}
     Fingerprint: ${cert.fingerprint}
