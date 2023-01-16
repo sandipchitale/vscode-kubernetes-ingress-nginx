@@ -71,7 +71,7 @@ CN=ISRG Root X1,
 
 This extension works with Microsoft Kubernetes extension.
 
-**IMPORTANT:** Make sure to install the `ingress-nginx` plgin for kubernetes and have it in your PATH.
+**IMPORTANT:** Make sure to [install](https://kubernetes.github.io/ingress-nginx/kubectl-plugin/#installation) the `ingress-nginx` plugin for Kubernetes and have it in your PATH environment variable.
 
 ## Known Issues
 
