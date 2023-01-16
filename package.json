@@ -3,7 +3,7 @@
     "displayName": "ingress-nginx kubectl plugin integration",
     "icon": "images/icon.png",
     "description": "Integrates with ingress-nginx kubectl plugin.",
-    "version": "1.0.19",
+    "version": "1.0.20",
     "preview": true,
     "license": "SEE IN FILE LICENSE",
     "keywords": [
@@ -57,7 +57,7 @@
             },
             {
                 "command": "k8s.ingress-nginx.conf",
-                "title": "NGINX config for ingress hosts",
+                "title": "NGINX configurations for ingress hosts",
                 "icon": "$(code)",
                 "category": "ingress-nginx"
             },

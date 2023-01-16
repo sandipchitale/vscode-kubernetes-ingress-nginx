@@ -23,11 +23,26 @@ export async function activate(context: vscode.ExtensionContext) {
     ingressNginxDeploymentNamespace = vscode.workspace.getConfiguration().get<string>('vscode-kubernetes-ingress-nginx.ingress-nginx-deployment-namespace', ingressNginxDeploymentNamespace);
     ingressNginxDeploymentName = vscode.workspace.getConfiguration().get<string>('vscode-kubernetes-ingress-nginx.ingress-nginx-deployment-name', ingressNginxDeploymentName);
 
-    context.subscriptions.push(vscode.commands.registerCommand('k8s.ingress-nginx.backends', backends));
-    context.subscriptions.push(vscode.commands.registerCommand('k8s.ingress-nginx.conf', hostConf));
-    context.subscriptions.push(vscode.commands.registerCommand('k8s.ingress-nginx.certs', hostCerts));
+    context.subscriptions.push(vscode.commands.registerCommand('k8s.ingress-nginx.backends', backendsWithProgress));
+    context.subscriptions.push(vscode.commands.registerCommand('k8s.ingress-nginx.conf', hostConfWithProgress));
+    context.subscriptions.push(vscode.commands.registerCommand('k8s.ingress-nginx.certs', hostCertsWithProgress));
 }
 
+async function backendsWithProgress(target?: any) {
+    vscode.window.withProgress({
+        location: vscode.ProgressLocation.Notification,
+        title: `Getting all backends for ingress`
+    }, (progress, token) => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                await backends(target);
+                resolve('');
+            } catch (error) {
+                reject(error)
+            }
+        });
+    });
+}
 
 async function backends(target?: any) {
     const explorer = await k8s.extension.clusterExplorer.v1;
@@ -57,6 +72,22 @@ async function backends(target?: any) {
             }
         }
     }
+}
+
+async function hostConfWithProgress(target?: any) {
+    vscode.window.withProgress({
+        location: vscode.ProgressLocation.Notification,
+        title: `Getting NGINX configurations for ingress hosts`
+    }, (progress, token) => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                await hostConf(target);
+                resolve('');
+            } catch (error) {
+                reject(error)
+            }
+        });
+    });
 }
 
 async function hostConf(target?: any) {
@@ -96,6 +127,22 @@ async function hostConf(target?: any) {
             }
         }
     }
+}
+
+async function hostCertsWithProgress(target?: any) {
+    vscode.window.withProgress({
+        location: vscode.ProgressLocation.Notification,
+        title: `Getting certificate chains for ingress hosts`
+    }, (progress, token) => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                await hostCerts(target);
+                resolve('');
+            } catch (error) {
+                reject(error)
+            }
+        });
+    });
 }
 
 async function hostCerts(target?: any) {
