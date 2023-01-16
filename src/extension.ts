@@ -47,9 +47,9 @@ async function backends(target?: any) {
                 try {
                     invokeCommandAndShowOutput(
                         `ingress-nginx backends -n ${ingressNginxDeploymentNamespace} --deployment ${ingressNginxDeploymentName}`,
-                        `# Ingress Backends :`,
+                        `// Ingress Backends`,
                         false,
-                        (await vscode.languages.getLanguages()).includes('NGINX') ? 'NGINX' : 'plaintext'
+                        'jsonc'
                     );
                 } catch (error) {
                     vscode.window.showErrorMessage(`Failed to get ingress backends.`);
@@ -85,7 +85,7 @@ async function hostConf(target?: any) {
                                     `ingress-nginx conf -n ${ingressNginxDeploymentNamespace} --deployment ${ingressNginxDeploymentName} --host ${rule.host}`,
                                     `# Configuration for ingress: ${commandTarget.name} host: ${rule.host} :`,
                                     false,
-                                    'plaintext'
+                                    (await vscode.languages.getLanguages()).includes('NGINX') ? 'NGINX' : 'plaintext'
                                 );
                             } catch (error) {
                                 vscode.window.showErrorMessage(`Failed to get configuration for ingress: ${commandTarget.name} host: ${rule.host}`);
