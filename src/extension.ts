@@ -4,7 +4,6 @@ import * as vscode from 'vscode';
 import * as k8s from 'vscode-kubernetes-tools-api';
 import { X509Certificate } from 'crypto';
 
-
 let ingressNginxDeploymentNamespace = 'ingress-nginx-ns';
 let ingressNginxDeploymentName = 'ingress-nginx-controller';
 
@@ -48,7 +47,9 @@ async function backends(target?: any) {
                 try {
                     invokeCommandAndShowOutput(
                         `ingress-nginx backends -n ${ingressNginxDeploymentNamespace} --deployment ${ingressNginxDeploymentName}`,
-                        `Ingress Backends:`
+                        `# Ingress Backends :`,
+                        false,
+                        (await vscode.languages.getLanguages()).includes('NGINX') ? 'NGINX' : 'plaintext'
                     );
                 } catch (error) {
                     vscode.window.showErrorMessage(`Failed to get ingress backends.`);
@@ -82,7 +83,9 @@ async function hostConf(target?: any) {
                             try {
                                 invokeCommandAndShowOutput(
                                     `ingress-nginx conf -n ${ingressNginxDeploymentNamespace} --deployment ${ingressNginxDeploymentName} --host ${rule.host}`,
-                                    `Configuration for ingress: ${commandTarget.name} host: ${rule.host}`
+                                    `# Configuration for ingress: ${commandTarget.name} host: ${rule.host} :`,
+                                    false,
+                                    'plaintext'
                                 );
                             } catch (error) {
                                 vscode.window.showErrorMessage(`Failed to get configuration for ingress: ${commandTarget.name} host: ${rule.host}`);
@@ -118,7 +121,7 @@ async function hostCerts(target?: any) {
                             try {
                                 const certificatesAndKeys = await invokeCommandAndShowOutput(
                                     `ingress-nginx certs -n ${ ingressNginxDeploymentNamespace } --deployment ${ ingressNginxDeploymentName } --host ${ rule.host }`,
-                                    `Certificates for ingress: ${commandTarget.name} host: ${rule.host}`,
+                                    `Certificates for ingress: ${commandTarget.name} host: ${rule.host} :`,
                                     true
                                 );
                             } catch (error) {
@@ -132,7 +135,7 @@ async function hostCerts(target?: any) {
     }
 }
 
-async function invokeCommandAndShowOutput(command: string, prefix: string, processCerts = false): Promise<string> {
+async function invokeCommandAndShowOutput(command: string, prefix: string, processCerts = false, language = 'plaintext'): Promise<string> {
     const kubectl = await k8s.extension.kubectl.v1;
     if (!kubectl.available) {
         return;
@@ -179,7 +182,8 @@ async function invokeCommandAndShowOutput(command: string, prefix: string, proce
             });
         }
         const doc = await vscode.workspace.openTextDocument({
-            content: `${prefix}:\n\n${content}`
+            language: language,
+            content: `${prefix}\n\n${content}`
         });
         await vscode.window.showTextDocument(doc, { preview: false });
         return Promise.resolve(commandDetails.stdout);
