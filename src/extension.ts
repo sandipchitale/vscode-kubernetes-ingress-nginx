@@ -220,7 +220,7 @@ async function invokeCommandAndShowOutput(command: string, prefix: string, proce
     Keyusage: ${cert.keyUsage}
     Serialnumbe: ${cert.serialNumber}
 }`.trim();
-                            content = `${content}\n${certificateAsPem}\n\nDecoded X509Certificate:\n${certString}\n\n`;
+                            content = `${content}\n${certificateAsPem}\n\nDecoded X509Certificate:\n\n${certString}\n\n`;
                         } catch (error) {
                             console.error(error);
                             content = `${content}\n${certificateOrKey}`;
